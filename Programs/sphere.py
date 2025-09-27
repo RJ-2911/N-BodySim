@@ -1,13 +1,22 @@
+import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+class Sphere:
+    def __init__(self, position, radius):
+        self.position = np.array(position, dtype=np.float32)
+        self.radius = float(radius)
 
-radius = 1
-def draw_sphere(x, y, z, radius):
+    def draw_sphere(self):
+        """
+        Draws the sphere at its own position with its own radius.
+        This function expects the caller to manage the GL matrix stack.
+        """
         glPushMatrix()
-        glTranslatef(x, y, z)   # move sphere to position
+        glTranslatef(float(self.position[0]), float(self.position[1]), float(self.position[2]))
         quad = gluNewQuadric()
         gluQuadricNormals(quad, GLU_SMOOTH)
-        gluSphere(quad, radius, 32, 32) #  sphere object, size, x, y (subdivisions: higher = smoother = more POWER!!!)
+        # Note: using 24/24 slices/stacks for reasonable quality
+        gluSphere(quad, self.radius, 24, 24)
         gluDeleteQuadric(quad)
-        glPopMatrix() 
+        glPopMatrix()
