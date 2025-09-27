@@ -6,18 +6,18 @@ from OpenGL.GLU import *
 
 import sphere as sp
 import camera
+import physicsCalc as pc
 
 # Simple scene holder
 class Scene:
     def __init__(self):
         # Put spheres inside the view frustum (z negative is forward)
         self.spheres = [
-            sp.Sphere([0.0, 0.0, -5.0], 1.0),
-            sp.Sphere([2.5, 0.0, -6.5], 0.8),
-            sp.Sphere([-2.0, 1.0, -7.0], 0.6),
+            sp.Sphere([0, 0, 0], [0, 0, 0], 1200, 5, (1, 0.4, 0.0, 1)),
+            sp.Sphere([0, 40, 0], [6, 0, 0], 5, 3, (0.6, 0.4, 1, 1))
         ]
         # Camera placed back on +Z, looking towards -Z by default (theta=0)
-        self.camera = camera.Camera([0.0, 0.0, 5.0])
+        self.camera = camera.Camera([0.0, 0.0, 100.0])
 
     def update(self, dt):
         # future physics/animation updates could go here
@@ -66,23 +66,29 @@ class Renderer:
 class SimWindow:
     def __init__(self):
         pg.init()
-        display = (800, 600)
+        display = (1900, 1200)
         pg.display.set_mode(display, DOUBLEBUF | OPENGL)
         pg.display.set_caption("N-Body - Debug Camera & Spheres")
 
         # Projection
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(60.0, (display[0] / display[1]), 0.1, 100.0)
+        gluPerspective(60.0, (display[0] / display[1]), 0.1, 500.0)
         glMatrixMode(GL_MODELVIEW)
 
         self.renderer = Renderer(display[0], display[1])
         self.scene = Scene()
         self.clock = pg.time.Clock()
-
+        
         self.angle = 0.0
         self.running = True
         self.main_loop()
+    
+    def calcForce(self, dt):
+         force_on_1 = pc.gravitationalforce(self.scene.spheres[0], self.scene.spheres[1])
+         force_on_2 = -force_on_1
+         self.scene.spheres[0].update(force_on_1, dt)
+         self.scene.spheres[1].update(force_on_2, dt)
 
     def handle_events(self, dt):
         # keyboard controls for camera
@@ -124,6 +130,7 @@ class SimWindow:
     def main_loop(self):
         while self.running:
             dt = self.clock.tick(60) / 1000.0  # seconds per frame
+            self.calcForce(dt)
             self.handle_events(dt)
             self.scene.update(dt)
 

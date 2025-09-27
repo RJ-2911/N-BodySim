@@ -3,9 +3,17 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 
 class Sphere:
-    def __init__(self, position, radius):
+    def __init__(self, position, velocity, mass, radius, color):
         self.position = np.array(position, dtype=np.float32)
         self.radius = float(radius)
+        self.velocity = np.array(velocity, dtype=float)
+        self.mass = mass
+        self.color = color
+
+    def update(self, force, dt):
+        acceleration = force / self.mass
+        self.velocity += acceleration * dt
+        self.position += self.velocity * dt
 
     def draw_sphere(self):
         """
