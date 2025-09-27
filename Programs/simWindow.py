@@ -17,7 +17,7 @@ class SimWindow:
 
         self.initGL()
 
-        angle = 0
+        angle = 1
 
         running = True
         while running:
@@ -26,17 +26,19 @@ class SimWindow:
                     running = False
                 elif event.type == KEYDOWN:
                     if event.key == K_UP:   # grow
-                        radius += 0.1
+                        sp.radius += 0.1
                     elif event.key == K_DOWN:  # shrink
-                        radius = max(0.1, radius - 0.1)
+                        sp.radius = max(0.1, sp.radius - 0.1)
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
             glPushMatrix()
-            glRotatef(angle, 0, 0, 0)  # rotate around axes
-            sp.draw_sphere( sp.x, sp.y, sp.z, sp.radius)
+            glRotatef(angle, 0, 1, 1)  # rotate around axes
+            sp.draw_sphere(0, 0, 0, sp.radius)
+
             glPopMatrix()
 
+            angle += 1  # increment angle for rotation
             
             pg.display.flip()
             pg.time.wait(10)
