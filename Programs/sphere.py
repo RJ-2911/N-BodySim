@@ -1,11 +1,8 @@
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-x = 0
-y = 0
-z = 0
-radius = 1
 
+radius = 1
 def draw_sphere(x, y, z, radius):
         glPushMatrix()
         glTranslatef(x, y, z)   # move sphere to position
