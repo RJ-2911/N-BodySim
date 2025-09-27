@@ -2,7 +2,7 @@ import pygame as pg
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
-import Programs.sphere as sp
+import sphere as sp
 
 class SimWindow:
     
