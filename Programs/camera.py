@@ -15,6 +15,7 @@ class Camera:
         self.theta = 0.0   # yaw (degrees)
         self.phi = 0.0     # pitch (degrees)
         self.update_vectors()
+        self.move_speed_base = 60
 
     def update_vectors(self):
         # convert angles to radians

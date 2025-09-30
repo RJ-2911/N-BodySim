@@ -18,7 +18,8 @@ class Scene:
           sp.Sphere([0, 0, 0], [0, 0, 5], 20000, 10, (1, 0, 0, 1)),
           sp.Sphere([0, 30, 0], [20, 0, 0], 5, 2, (0, 1, 0, 1)),
           sp.Sphere([0, 50, 0], [18, 0, 0], 20, 4, (0, 0, 1, 1)),
-          sp.Sphere([0, 80, 0], [-15, 0, 0], 50, 6, (1, 0, 0, 1)),
+          sp.Sphere([0, 80, 0], [-15, 0, 0], 50, 6, (1, 0, 1, 1)),
+          sp.Sphere([0, 120, 0], [10, 0, 0], 40, 4, (0.6, 0.6, 1, 1))
         ]
 
         # Camera placed back on +Z, looking towards -Z by default (theta=0)
@@ -120,7 +121,7 @@ class Renderer:
         
         if self.showAxes:
             self.draw_axes(camera_obj, 1, 20)
-        self.draw_grid(5000, 100)
+        self.draw_grid(50000, 100)
 
 
         for sphere in spheres:
@@ -137,7 +138,7 @@ class SimWindow:
         # Projection
         glMatrixMode(GL_PROJECTION)
         glLoadIdentity()
-        gluPerspective(60.0, (display[0] / display[1]), 0.1, 2000.0)
+        gluPerspective(60.0, (display[0] / display[1]), 0.1, 10000.0)
         glMatrixMode(GL_MODELVIEW)
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -158,7 +159,7 @@ class SimWindow:
         sphere.update(force, dt)
 
     def handle_events(self, dt):
-
+        
         pg.mouse.set_visible(False)
         pg.event.set_grab(True)
         for event in pg.event.get():
@@ -181,7 +182,9 @@ class SimWindow:
                 self.scene.camera.rotate(dtheta=dx * sensitivity, dphi=-dy * sensitivity)
 
         keys = pg.key.get_pressed()
-        move_speed = 60.0 * dt
+        if self.scene.camera.move_speed_base <= 0:
+                self.scene.camera.move_speed_base = 5
+        move_speed = self.scene.camera.move_speed_base * dt
         rot_speed = 60.0 * dt 
 
         # movement (local camera space)
@@ -197,6 +200,12 @@ class SimWindow:
             self.scene.camera.move_local(dy=-move_speed)
         if keys[K_SPACE]:
             self.scene.camera.move_local(dy=move_speed)
+            
+        # cmaera speed
+        if keys[K_q]:
+            self.scene.camera.move_speed_base += 5
+        if keys[K_e]:
+            self.scene.camera.move_speed_base -= 5
 
         # rotation yaw/pitch
         if keys[K_LEFT]:
