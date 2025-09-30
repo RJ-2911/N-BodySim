@@ -1,0 +1,5 @@
+Preset: 1
+2 Body with one body on a Helix around another:
+    sp.Sphere([0, 0, 0], [0, 0, 5], 15000, 5, (1, 0.4, 0.0, 1)),
+    sp.Sphere([0, 30, 0], [20, 0, 20 ], 500, 2, (0.6, 0.4, 1, 1))
+
