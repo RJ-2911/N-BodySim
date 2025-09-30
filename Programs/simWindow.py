@@ -49,6 +49,7 @@ class Renderer:
         self.showGridZX = True
 
     def draw_grid(self, size, step):   
+        glDisable(GL_LIGHTING)
         glColor3f(0.3, 0.3, 0.3) 
         glBegin(GL_LINES)
         
@@ -73,6 +74,7 @@ class Renderer:
                 glVertex3f(0, -size, i)
                 glVertex3f(0,  size, i)
         glEnd()
+        glEnable(GL_LIGHTING)
     
     def drawGL(self, spheres, camera_obj, angle):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
