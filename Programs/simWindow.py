@@ -15,8 +15,8 @@ class Scene:
     def __init__(self):
         # Put spheres inside the view frustum (z negative is forward)
         self.spheres = [
-            sp.Sphere([0, 15, 0], [-20, 0, 20 ], 15000, 2, (1, 0, 0.5, 1)),
-            sp.Sphere([0, 0, 0], [20, 0, 20 ], 15000, 2, (0, 1, 0.5, 1)),
+            sp.Sphere([-100, -30, 0], [15, 0, 0], 150000, 3, (1, 0.4, 0.0, 1)),
+            sp.Sphere([100, 30, 0], [-15, 0, 0 ], 150000, 3, (0.6, 0.4, 1, 1))
         ]
         # Camera placed back on +Z, looking towards -Z by default (theta=0)
         self.camera = camera.Camera([0.0, 0.0, 100.0])
