@@ -47,6 +47,7 @@ class Renderer:
         self.showGridXY = True
         self.showGridYZ = True
         self.showGridZX = True
+        self.showAxes = True
     
     def draw_axes(self, camera_obj, size, distance): # Big Distance = Small Crosshair
            
@@ -114,7 +115,8 @@ class Renderer:
         # Use the Camera's gluLookAt
         camera_obj.apply_view()
         
-        self.draw_axes(camera_obj, 1, 20)
+        if self.showAxes:
+            self.draw_axes(camera_obj, 1, 20)
         self.draw_grid(5000, 100)
 
 
@@ -170,6 +172,8 @@ class SimWindow:
                     self.renderer.showGridYZ = not self.renderer.showGridYZ
                 elif event.key == K_3:
                     self.renderer.showGridZX = not self.renderer.showGridZX
+                elif event.key == K_4:
+                    self.renderer.showAxes = not self.renderer.showAxes
             elif event.type == MOUSEMOTION:
                 dx, dy = event.rel  
                 sensitivity = 0.14   
