@@ -47,6 +47,36 @@ class Renderer:
         self.showGridXY = True
         self.showGridYZ = True
         self.showGridZX = True
+    
+    def draw_axes(self, camera_obj, size, distance): # Big Distance = Small Crosshair
+           
+        base = camera_obj.position + camera_obj.forwards * distance
+        glPushAttrib(GL_ENABLE_BIT | GL_LINE_BIT | GL_CURRENT_BIT)
+        glDisable(GL_LIGHTING)
+        glDisable(GL_DEPTH_TEST)
+        glLineWidth(3.0)
+        glBegin(GL_LINES)
+
+        # X axis
+        glColor3f(1.0, 0.0, 0.0)
+        glVertex3f(base[0], base[1], base[2])
+        glVertex3f(base[0] + size, base[1], base[2])
+
+        # Y axis 
+        glColor3f(0.0, 1.0, 0.0)
+        glVertex3f(base[0], base[1], base[2])
+        glVertex3f(base[0], base[1] + size, base[2])
+
+        # Z axis 
+        glColor3f(0.0, 0.0, 1.0)
+        glVertex3f(base[0], base[1], base[2])
+        glVertex3f(base[0], base[1], base[2] + size)
+
+        glEnd()
+        
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_LIGHTING)
+        glPopAttrib()
 
     def draw_grid(self, size, step):   
         glDisable(GL_LIGHTING)
@@ -84,7 +114,8 @@ class Renderer:
         # Use the Camera's gluLookAt
         camera_obj.apply_view()
         
-        self.draw_grid(size=5000, step=100)
+        self.draw_axes(camera_obj, 1, 20)
+        self.draw_grid(5000, 100)
 
 
         for sphere in spheres:
@@ -125,6 +156,8 @@ class SimWindow:
 
     def handle_events(self, dt):
 
+        pg.mouse.set_visible(False)
+        pg.event.set_grab(True)
         for event in pg.event.get():
             if event.type == QUIT:
                 self.running = False
@@ -137,6 +170,10 @@ class SimWindow:
                     self.renderer.showGridYZ = not self.renderer.showGridYZ
                 elif event.key == K_3:
                     self.renderer.showGridZX = not self.renderer.showGridZX
+            elif event.type == MOUSEMOTION:
+                dx, dy = event.rel  
+                sensitivity = 0.14   
+                self.scene.camera.rotate(dtheta=dx * sensitivity, dphi=-dy * sensitivity)
 
         keys = pg.key.get_pressed()
         move_speed = 60.0 * dt
