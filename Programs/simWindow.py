@@ -13,8 +13,9 @@ class Scene:
     def __init__(self):
         # Put spheres inside the view frustum (z negative is forward)
         self.spheres = [
-            sp.Sphere([0, 0, 0], [0, 0, 0], 1200, 5, (1, 0.4, 0.0, 1)),
-            sp.Sphere([0, 40, 0], [6, 0, 0], 5, 3, (0.6, 0.4, 1, 1))
+            sp.Sphere([0, 0, 0], [0, 0, 0], 15000, 5, (1, 0.4, 0.0, 1)),
+            sp.Sphere([0, 30, 0], [0, 0, 0 ], 5, 2, (0.6, 0.4, 1, 1)),
+            sp.Sphere([0, -30, 0], [0, 0, 0 ], 5, 2, (0.6, 0.4, 1, 1))
         ]
         # Camera placed back on +Z, looking towards -Z by default (theta=0)
         self.camera = camera.Camera([0.0, 0.0, 100.0])
@@ -50,18 +51,9 @@ class Renderer:
         # Use the Camera's gluLookAt
         camera_obj.apply_view()
 
-        # optional spin applied per object (keeps transforms local)
-        for i, s in enumerate(spheres):
-            glPushMatrix()
-            # if you want each sphere to slowly spin around its own Y axis:
-            glTranslatef(float(s.position[0]), float(s.position[1]), float(s.position[2]))
-            glRotatef(angle + i * 10.0, 0.0, 1.0, 0.0)
-            # draw sphere centered at origin now (because we translated)
-            quad = gluNewQuadric()
-            gluQuadricNormals(quad, GLU_SMOOTH)
-            gluSphere(quad, s.radius, 24, 24)
-            gluDeleteQuadric(quad)
-            glPopMatrix()
+        for sphere in spheres:
+            sphere.draw_sphere()
+        
 
 class SimWindow:
     def __init__(self):
@@ -75,6 +67,8 @@ class SimWindow:
         glLoadIdentity()
         gluPerspective(60.0, (display[0] / display[1]), 0.1, 500.0)
         glMatrixMode(GL_MODELVIEW)
+        glEnable(GL_BLEND)
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
         self.renderer = Renderer(display[0], display[1])
         self.scene = Scene()
@@ -100,13 +94,13 @@ class SimWindow:
                     self.running = False
 
         keys = pg.key.get_pressed()
-        move_speed = 5.0 * dt
+        move_speed = 50.0 * dt
         rot_speed = 60.0 * dt  # degrees per second
 
         # movement (local camera space)
-        if keys[K_w]:
-            self.scene.camera.move_local(dz=-move_speed)  # forward (negative because forwards goes -Z)
         if keys[K_s]:
+            self.scene.camera.move_local(dz=-move_speed)  # forward (negative because forwards goes -Z)
+        if keys[K_w]:
             self.scene.camera.move_local(dz=move_speed)
         if keys[K_a]:
             self.scene.camera.move_local(dx=-move_speed)
