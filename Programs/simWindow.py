@@ -8,13 +8,15 @@ import sphere as sp
 import camera
 import physicsCalc as pc
 
+
+
 # Simple scene holder
 class Scene:
     def __init__(self):
         # Put spheres inside the view frustum (z negative is forward)
         self.spheres = [
-            sp.Sphere([0, 15, 0], [-20, 0, 20 ], 15000, 2, (1, 0, 0, 1)),
-            sp.Sphere([0, 0, 0], [20, 0, 20 ], 15000, 2, (0, 1, 0, 1)),
+            sp.Sphere([0, 15, 0], [-20, 0, 20 ], 15000, 2, (1, 0, 0.5, 1)),
+            sp.Sphere([0, 0, 0], [20, 0, 20 ], 15000, 2, (0, 1, 0.5, 1)),
         ]
         # Camera placed back on +Z, looking towards -Z by default (theta=0)
         self.camera = camera.Camera([0.0, 0.0, 100.0])
@@ -39,9 +41,39 @@ class Renderer:
         glClearColor(0.05, 0.05, 0.08, 1.0)
 
         # material default
-        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, (0.4, 0.6, 0.9, 1.0))
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, (0.3, 0.3, 0.3, 1.0))
         glViewport(0, 0, width, height)
+                
+        self.showGridXY = True
+        self.showGridYZ = True
+        self.showGridZX = True
 
+    def draw_grid(self, size, step):   
+        glColor3f(0.3, 0.3, 0.3) 
+        glBegin(GL_LINES)
+        
+        if self.showGridXY:
+            for i in range(-size, size + 1, step):
+                glVertex3f(i, -size, 0)
+                glVertex3f(i,  size, 0)
+                glVertex3f(-size, i, 0)
+                glVertex3f( size, i, 0)
+
+        if self.showGridZX:
+            for i in range(-size, size + 1, step):
+                glVertex3f(i, 0, -size)
+                glVertex3f(i, 0,  size)
+                glVertex3f(-size, 0, i)
+                glVertex3f( size, 0, i)
+
+        if self.showGridYZ:
+            for i in range(-size, size + 1, step):
+                glVertex3f(0, i, -size)
+                glVertex3f(0, i,  size)
+                glVertex3f(0, -size, i)
+                glVertex3f(0,  size, i)
+        glEnd()
+    
     def drawGL(self, spheres, camera_obj, angle):
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glMatrixMode(GL_MODELVIEW)
@@ -49,6 +81,9 @@ class Renderer:
 
         # Use the Camera's gluLookAt
         camera_obj.apply_view()
+        
+        self.draw_grid(size=5000, step=100)
+
 
         for sphere in spheres:
             sphere.draw_sphere()
@@ -57,7 +92,7 @@ class Renderer:
 class SimWindow:
     def __init__(self):
         pg.init()
-        display = (800, 600)
+        display = (1900, 1200)
         pg.display.set_mode(display, DOUBLEBUF | OPENGL)
         pg.display.set_caption("N-Body - Debug Camera & Spheres")
 
@@ -77,6 +112,8 @@ class SimWindow:
         self.running = True
         self.main_loop()
     
+
+    
     def calcForce(self, dt):
         # TODO: Forces for 3
          force_on_1 = pc.gravitationalforce(self.scene.spheres[0], self.scene.spheres[1])
@@ -92,6 +129,12 @@ class SimWindow:
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     self.running = False
+                elif event.key == K_1:
+                    self.renderer.showGridXY = not self.renderer.showGridXY
+                elif event.key == K_2:
+                    self.renderer.showGridYZ = not self.renderer.showGridYZ
+                elif event.key == K_3:
+                    self.renderer.showGridZX = not self.renderer.showGridZX
 
         keys = pg.key.get_pressed()
         move_speed = 60.0 * dt
@@ -120,7 +163,7 @@ class SimWindow:
             self.scene.camera.rotate(dphi=rot_speed)
         if keys[K_DOWN]:
             self.scene.camera.rotate(dphi=-rot_speed)
-
+            
     def main_loop(self):
         while self.running:
             dt = self.clock.tick(60) / 1000.0  # seconds per frame
