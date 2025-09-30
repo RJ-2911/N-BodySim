@@ -25,7 +25,7 @@ class Sphere:
         glTranslatef(float(self.position[0]), float(self.position[1]), float(self.position[2]))
         quad = gluNewQuadric()
         gluQuadricNormals(quad, GLU_SMOOTH)
-        # Note: using 24/24 slices/stacks for reasonable quality
+        glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE, self.color)
         gluSphere(quad, self.radius, 24, 24)
         gluDeleteQuadric(quad)
         glPopMatrix()
