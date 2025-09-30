@@ -15,9 +15,12 @@ class Scene:
     def __init__(self):
         # Put spheres inside the view frustum (z negative is forward)
         self.spheres = [
-            sp.Sphere([-100, -30, 0], [15, 0, 0], 150000, 3, (1, 0.4, 0.0, 1)),
-            sp.Sphere([100, 30, 0], [-15, 0, 0 ], 150000, 3, (0.6, 0.4, 1, 1))
+          sp.Sphere([0, 0, 0], [0, 0, 5], 20000, 10, (1, 0, 0, 1)),
+          sp.Sphere([0, 30, 0], [20, 0, 0], 5, 2, (0, 1, 0, 1)),
+          sp.Sphere([0, 50, 0], [18, 0, 0], 20, 4, (0, 0, 1, 1)),
+          sp.Sphere([0, 80, 0], [-15, 0, 0], 50, 6, (1, 0, 0, 1)),
         ]
+
         # Camera placed back on +Z, looking towards -Z by default (theta=0)
         self.camera = camera.Camera([0.0, 0.0, 100.0])
 
@@ -150,11 +153,9 @@ class SimWindow:
 
     
     def calcForce(self, dt):
-        # TODO: Forces for 3
-         force_on_1 = pc.gravitationalforce(self.scene.spheres[0], self.scene.spheres[1])
-         force_on_2 = -force_on_1
-         self.scene.spheres[0].update(force_on_1, dt)
-         self.scene.spheres[1].update(force_on_2, dt)
+      forces = pc.compute_forces(self.scene.spheres)
+      for sphere, force in zip(self.scene.spheres, forces):
+        sphere.update(force, dt)
 
     def handle_events(self, dt):
 
