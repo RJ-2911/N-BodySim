@@ -16,6 +16,12 @@ import physicsCalc as phy
 # Holds Everything For Simulation Window
 class SimWindow:
     def __init__(self):
+        # Inititalizing attributes for simulation window.
+        display = (1900, 1200)    
+        self.setWindow(display)
+        self.clock = pg.time.Clock()
+        self.angle = 0.0
+        self.running = True   
        
         # Initializing Classes for all files to access.
         self.physics = phy.Physics(self)
@@ -23,14 +29,6 @@ class SimWindow:
         self.renderer = rd.Renderer(self, display[0], display[1])
         self.event = ev.Events(self)
         
-        # Inititalizing attributes for simulation window.
-        display = (1900, 1200)    
-        self.setWindow(display)
-        self.clock = pg.time.Clock()
-        self.angle = 0.0
-        self.running = True    
-    
-
     def setWindow(self, display):
         # Sets up the Simulation Window
         pg.init()
