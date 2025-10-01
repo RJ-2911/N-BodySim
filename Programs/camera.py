@@ -1,6 +1,8 @@
 import numpy as np
 from OpenGL.GLU import gluLookAt
 
+import simWindow as sw
+
 def _normalize(v):
     v = np.array(v, dtype=np.float32)
     norm = np.linalg.norm(v)
@@ -9,13 +11,13 @@ def _normalize(v):
     return v / norm
 
 class Camera:
-    def __init__(self, position):
+    def __init__(self, simWin, position):
         self.position = np.array(position, dtype=np.float32)
-        # Looking down -Z by default (theta=0, phi=0) so gluLookAt looks towards negative Z
         self.theta = 0.0   # yaw (degrees)
         self.phi = 0.0     # pitch (degrees)
         self.update_vectors()
         self.move_speed_base = 60
+        self.simWin = simWin
 
     def update_vectors(self):
         # convert angles to radians
