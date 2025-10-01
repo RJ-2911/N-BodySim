@@ -8,6 +8,8 @@ class Physics:
         
     
     def compute_forces(self, bodies, G=1.0):
+        # Computes Gravitaional Forces among 2 relative
+        
         n = len(bodies)
         forces = [np.zeros(3) for _ in range(n)]
         eps = 0.1  # softening length
@@ -26,8 +28,8 @@ class Physics:
         return forces
 
     def calcForce(self, spheres, dt):
+        # Compiles all Relative Forces on the bodies
+        
         forces = self.compute_forces(spheres)
         for sphere, force in zip(spheres, forces):
-            sphere.update(force, dt)
-
-        
+            sphere.update(force, dt)  

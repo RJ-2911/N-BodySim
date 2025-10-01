@@ -10,12 +10,18 @@ class Events:
         self.simWin = simWin
     
     def handle_events(self, dt):
+        # Handle Key Inputs for various Funtions
         
         pg.mouse.set_visible(False)
         pg.event.set_grab(True)
+        
         for event in pg.event.get():
+            
+            # Quit / Exit Event
             if event.type == QUIT:
                 self.simWin.running = False
+            
+            # Keypressed Event
             elif event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     self.simWin.running = False
@@ -27,18 +33,22 @@ class Events:
                     self.simWin.renderer.showGridZX = not self.simWin.renderer.showGridZX
                 elif event.key == K_4:
                     self.simWin.renderer.showAxes = not self.simWin.renderer.showAxes
+                    
+            # Mouse Motion Event
             elif event.type == MOUSEMOTION:
+                # Camera Panning
                 dx, dy = event.rel  
                 sensitivity = 0.14   
                 self.simWin.scene.camera.rotate(dtheta=dx * sensitivity, dphi=-dy * sensitivity)
 
+        # Key Press and Hold Event
         keys = pg.key.get_pressed()
+        
+        # Camera Movement
         if self.simWin.scene.camera.move_speed_base <= 0:
                 self.simWin.scene.camera.move_speed_base = 5
         move_speed = self.simWin.scene.camera.move_speed_base * dt
         rot_speed = 60.0 * dt 
-
-        # movement (local camera space)
         if keys[K_s]:
             self.simWin.scene.camera.move_local(dz=-move_speed) 
         if keys[K_w]:
@@ -52,13 +62,13 @@ class Events:
         if keys[K_SPACE]:
             self.simWin.scene.camera.move_local(dy=move_speed)
             
-        # cmaera speed
+        # Camera Speed Movement Control
         if keys[K_q]:
             self.simWin.scene.camera.move_speed_base += 5
         if keys[K_e]:
             self.simWin.scene.camera.move_speed_base -= 5
 
-        # rotation yaw/pitch
+        # Camera Rotation Control
         if keys[K_LEFT]:
             self.simWin.scene.camera.rotate(dtheta=-rot_speed)
         if keys[K_RIGHT]:
@@ -67,4 +77,3 @@ class Events:
             self.simWin.scene.camera.rotate(dphi=rot_speed)
         if keys[K_DOWN]:
             self.simWin.scene.camera.rotate(dphi=-rot_speed)
-            

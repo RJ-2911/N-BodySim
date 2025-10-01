@@ -5,7 +5,5 @@ class Main():
         self.simWin = sw.SimWindow()
         self.simWin.main_loop()
         
-        
-
 if __name__ == "__main__":
     Main()

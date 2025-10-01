@@ -13,14 +13,16 @@ class Sphere:
         self.trail = deque(maxlen=2000)
 
     def update(self, force, dt):
+        # Updates Body's attributes
+        
         acceleration = force / self.mass
         self.velocity += acceleration * dt
         self.position += self.velocity * dt
-        
         self.trail.append(self.position.copy())
 
     def draw_sphere(self):
-       
+        # Draws a Sphere for rendring.
+        
         glPushMatrix()
         glTranslatef(float(self.position[0]), float(self.position[1]), float(self.position[2]))
         quad = gluNewQuadric()
@@ -30,6 +32,7 @@ class Sphere:
         gluDeleteQuadric(quad)
         glPopMatrix()
         
+        # draws shpere trails
         if len(self.trail) > 1:
             glBegin(GL_LINE_STRIP)
             for i, pos in enumerate(self.trail):
@@ -37,6 +40,3 @@ class Sphere:
                 glColor4f(1, 1, 1, 1)
                 glVertex3f(pos[0], pos[1], pos[2])
             glEnd()
-           
-
-
