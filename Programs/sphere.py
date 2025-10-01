@@ -10,7 +10,7 @@ class Sphere:
         self.velocity = np.array(velocity, dtype=float)
         self.mass = mass
         self.color = color
-        self.trail = deque(maxlen=2000)
+        self.trail = deque(maxlen=1000)
 
     def update(self, force, dt):
         # Updates Body's attributes

@@ -22,6 +22,7 @@ class SimWindow:
         self.clock = pg.time.Clock()
         self.angle = 0.0
         self.running = True   
+        self.sim_speed = 10 # Keep below 100, if 100+ thencalculation precision suffers and simulation breaks
        
         # Initializing Classes for all files to access.
         self.physics = phy.Physics(self)
@@ -46,9 +47,10 @@ class SimWindow:
     def main_loop(self):
         # Keeps the Window running and updated
         while self.running:
-            dt = self.clock.tick(60) / 1000.0  # seconds per frame
-            self.physics.calcForce(self.scene.spheres, dt)
-            self.event.handle_events(dt)
+            dt = 0.001 # seconds per frame
+            scaled_dt = dt * self.sim_speed
+            self.physics.calcForce(self.scene.spheres, scaled_dt)
+            self.event.handle_events(60/1000)
 
             self.renderer.drawGL(self.scene.spheres, self.scene.camera, self.angle)
             pg.display.flip()
