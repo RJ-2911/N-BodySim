@@ -45,6 +45,12 @@ Solar System
         # Neptune
         sp.Sphere([0, -300, 0], [57.7, 0, 0], 400, 3.5, (0.3, 0.3, 1, 1)),
 
+Preset: 5
+3- Body Problem Solution, Lagrangian Orbit.
+        sp.Sphere([30, 0, 0], [-5, 5, 0], 2000, 3, (1, 0.6, 0, 1)),
+        sp.Sphere([0, 30, 0], [0, -5, 5], 2000, 3, (0, 1, 0.6, 1)),
+        sp.Sphere([0, 0, 30], [5, 0, -5], 2000, 3, (0.6, 0, 1, 1)),
+
 
 
 
