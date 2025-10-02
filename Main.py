@@ -1,29 +1,31 @@
 import pygame
-import gui.components as c
-import gui.show as s
-import gui.event as e
-import gui.dynamicComponents as dc
+from gui.components import Color
+from gui.event import EventHandler
+from gui.models import *
 
 pygame.init()
 
 # main window
-window = pygame.display.set_mode((1200, 700))
+window = pygame.display.set_mode((0, 0))    # (0,0) set to fullscreen
 pygame.display.set_caption("N-Body Simulation")
 icon = pygame.image.load("resources/icon.png")
 pygame.display.set_icon(icon)
     
+Surfaces.main_surface = window.get_size()
+Surfaces.initialize()
+
 # mainloop
-while dc.Boolean.is_running:
-    window.fill((c.Color.primary))
+while Surfaces.is_running:
+    window.fill((Color.primary))
     
     # event handler
     for event in pygame.event.get():
-        e.EventHandler.eventhandler(event)
+        EventHandler.eventhandler(event)
 
-    # show different screens or panles or frames
-    s.Show.info_panel(window)
-    s.Show.play_pause_buttons(window)
-    s.Show.add_context(window)
+    # show info panel
+    InfoControlPanel.show(window)
+    OtherPanel.show(window)
+
 
     pygame.display.update()
 
