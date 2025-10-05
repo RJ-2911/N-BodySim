@@ -1,7 +1,5 @@
-import sphere as sp
-import camera
-
-import simWindow as sw
+import simulation.sphere as sp
+import simulation.camera as camera
 
 class Scene:
     def __init__(self, simWin):

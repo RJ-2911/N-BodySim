@@ -4,12 +4,10 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
-import sphere as sp
-import camera
-import scene as sc
-import renderer as rd
-import events as ev
-import physicsCalc as phy
+import simulation.scene as sc
+import simulation.renderer as rd
+import simulation.events as ev
+import simulation.physicsCalc as phy
 
 
 

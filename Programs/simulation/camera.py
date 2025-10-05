@@ -1,8 +1,6 @@
 import numpy as np
 from OpenGL.GLU import gluLookAt
 
-import simWindow as sw
-
 def _normalize(v):
     # Normalizing Vectors
     v = np.array(v, dtype=np.float32)

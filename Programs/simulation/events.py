@@ -1,10 +1,6 @@
 import pygame as pg
 from pygame.locals import *
 
-import simWindow as sw
-
-
-
 class Events:
     def __init__(self, simWin):
         self.simWin = simWin
