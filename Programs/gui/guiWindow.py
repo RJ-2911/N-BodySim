@@ -5,11 +5,12 @@ import gui.components as comp
 import gui.event as ev
 import gui.models as mod
 import gui.body as bd
-
-
-# Main GUI Window for N-Body Simulation
 class GuiWindow:
-    def __init__(self):
+    def __init__(self, body_to_sim_queue, sim_to_body_queue):
+        # Store queues for communication
+        self.body_to_sim_queue = body_to_sim_queue
+        self.sim_to_body_queue = sim_to_body_queue
+        
         # Initialize main window
         self.window = pg.display.set_mode((420, 900)) 
         pg.display.set_caption("N-Body Simulation")
@@ -24,7 +25,6 @@ class GuiWindow:
         # Body handler
         self.body = bd.Body(self)
         
-        # --- Instantiate all GUI objects here ---
         self.play_pause = mod.PlayPause(self)
         self.reset = mod.Reset(self)
         self.fast = mod.Fast(self)
@@ -50,6 +50,9 @@ class GuiWindow:
             # Handle events
             for event in pg.event.get():
                 self.event_handler.handle_event(event)
+
+            # Update body data from simulation
+            self.body.update_from_sim()
 
             # Draw UI
             self.info_control_panel.show(self.window)

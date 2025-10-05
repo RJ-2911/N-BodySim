@@ -1,9 +1,12 @@
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 import simulation.simWindow as sw
 import gui.guiWindow as gw
 
 class Main:
     def __init__(self):
+        self.body_to_sim_queue = Queue() 
+        self.sim_to_body_queue = Queue()  
+        
         gui_process = Process(target=self.run_gui)
         sim_process = Process(target=self.run_sim)
 
@@ -14,11 +17,11 @@ class Main:
         sim_process.join()
 
     def run_gui(self):
-        gui = gw.GuiWindow()
+        gui = gw.GuiWindow(self.body_to_sim_queue, self.sim_to_body_queue)
         gui.main_loop()
 
     def run_sim(self):
-        sim = sw.SimWindow()
+        sim = sw.SimWindow(self.body_to_sim_queue, self.sim_to_body_queue)
         sim.main_loop()
 
 if __name__ == "__main__":
