@@ -1,5 +1,4 @@
 import numpy as np   
-import simWindow as sw
 
 class Physics:
     
