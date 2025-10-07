@@ -12,10 +12,11 @@ from simulation.sphere import Sphere
 
 # Holds Everything For Simulation Window
 class SimWindow:
-    def __init__(self, body_to_sim_queue, sim_to_body_queue):
+    def __init__(self, body_to_sim_queue, sim_to_body_queue, mainObj):
         # Store queues for communication
         self.body_to_sim_queue = body_to_sim_queue
         self.sim_to_body_queue = sim_to_body_queue
+        self.mainObj = mainObj
         
         # Initializing attributes for simulation window
         display = (800, 600)    
@@ -23,7 +24,7 @@ class SimWindow:
         self.clock = pg.time.Clock()
         self.angle = 0.0
         self.running = True   
-        self.sim_speed = 10  # Keep below 100, if 100+ then calculation precision suffers and simulation breaks
+        # Keep below 100, if 100+ then calculation precision suffers and simulation breaks
        
         # Initializing Classes for all files to access
         self.physics = phy.Physics(self)

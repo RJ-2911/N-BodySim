@@ -99,6 +99,11 @@ class PlayPause:
     
     def function(self):
         self.guiWin.surfaces.is_playing = not self.guiWin.surfaces.is_playing
+        if self.guiWin.surfaces.is_playing:
+            self.guiWin.mainObj.sim_speed = 10
+        else:
+            self.guiWin.mainObj.sim_speed = 0
+            
 
 # Reset control button
 class Reset:
