@@ -5,12 +5,13 @@ class Physics:
     def __init__(self, simWin):
         self.simWin = simWin
         
-    
     def compute_forces(self, bodies, G=1.0):
-        # Computes Gravitaional Forces among 2 relative
-        
+        """
+        Computes gravitational forces among pairs of bodies.
+        Returns a list of force vectors for each body.
+        """
         n = len(bodies)
-        forces = [np.zeros(3) for _ in range(n)]
+        forces = [np.zeros(3, dtype=np.float32) for _ in range(n)]
         eps = 0.1  # softening length
 
         for i in range(n):
@@ -27,8 +28,7 @@ class Physics:
         return forces
 
     def calcForce(self, spheres, dt):
-        # Compiles all Relative Forces on the bodies
-        
         forces = self.compute_forces(spheres)
         for sphere, force in zip(spheres, forces):
-            sphere.update(force, dt)  
+            sphere.update(force, dt)
+        return forces

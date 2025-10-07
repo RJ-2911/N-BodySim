@@ -5,6 +5,7 @@ import gui.components as comp
 import gui.event as ev
 import gui.models as mod
 import gui.body as bd
+
 class GuiWindow:
     def __init__(self, body_to_sim_queue, sim_to_body_queue):
         # Store queues for communication

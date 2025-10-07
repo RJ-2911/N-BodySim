@@ -24,7 +24,7 @@ class Surfaces:
         self.control_surface = [0, 710, 400, 150]
         self.object_surface = [400, 0, self.main_surface[0]-400, self.main_surface[1]]
         self.is_running = True
-        self.object_panel = [10, 60, 380, 50]
+        self.object_panel = [10, 60, 380, 120]
 
 # Main information and control panel
 class InfoControlPanel:
@@ -178,13 +178,24 @@ class AddForm:
         self.guiWin = guiWin
         self.is_visible = False
         self.object = []
+        self.method = meth.Method(self.guiWin)  # Initialize Method to access result_list
         
     def show(self):
         if self.is_visible:
-            self.is_visible = False      # Change it on your own risk
-            m = meth.Method(self.guiWin)
-            thread1 = threading.Thread(target=m.show_add_form)
+            thread1 = threading.Thread(target=self._show_add_form)
             thread1.start()
+            thread1.join()  # Wait for form to close to get result_list
+            if self.method.result_list:  # Check if result_list has data
+                # Normalize color values from (0-255) to (0.0-1.0)
+                body_data = self.method.result_list
+                position, velocity, mass, radius, color = body_data
+                normalized_color = (color[0]/255.0, color[1]/255.0, color[2]/255.0, color[3])
+                normalized_body_data = [position, velocity, mass, radius, normalized_color]
+                self.guiWin.body.add_object(normalized_body_data)
+            self.is_visible = False  # Reset visibility after processing
+
+    def _show_add_form(self):
+        self.method.show_add_form()  # Run Tkinter form to collect user input
 
 # Object information display
 class ObjectInfo:
@@ -193,7 +204,8 @@ class ObjectInfo:
         self.cas = [0, 0, 0, 0]
         
     def show(self, surface):
-        for i in self.guiWin.body.original_list:
+        # Use sim_spheres to display current simulation state
+        for i, sphere in enumerate(self.guiWin.body.sim_spheres):
             cas = self.guiWin.surfaces.object_panel
             x = cas[0]
             y = cas[1]
@@ -201,18 +213,22 @@ class ObjectInfo:
             h = cas[3]
             x += 10
             y += 5
-            pg.draw.rect(surface, comp.Color.primary, (x, y, w, h), 0, 2)
+            pg.draw.rect(surface, comp.Color.primary, (x, y, w, 105), 0, 2)
             
             x += 5
             y += 5
-            surface.blit(meth.Method(self.guiWin).string_show("Position:", i[0][0], i[0][1], i[0][2]), (x, y))
-            x += 220
-            surface.blit(meth.Method(self.guiWin).string_show("Acceleration:"), (x, y))
-            x -= 220
-            y += 20
-            surface.blit(meth.Method(self.guiWin).string_show("Velocity:", i[1][0], i[1][1], i[1][2]), (x, y))
-            x += 220
-            surface.blit(meth.Method(self.guiWin).string_show("Force:"), (x, y))
-            self.guiWin.surfaces.object_panel[1] += 60
+            pos = sphere[0]  # position
+            vel = sphere[1]  # velocity
+            mass = sphere[2]  # mass
+            radius = sphere[3]  # radius
+            color = sphere[4]  # color
+            surface.blit(meth.Method(self.guiWin).string_show("Position:", pos[0], pos[1], pos[2]), (x, y))
+            y += 25
+            surface.blit(meth.Method(self.guiWin).string_show("Velocity:", vel[0], vel[1], vel[2]), (x, y))            
+            y += 25
+            surface.blit(meth.Method(self.guiWin).string_show("Mass:", mass), (x, y))
+            y += 25
+            surface.blit(meth.Method(self.guiWin).string_show("Radius:", radius), (x, y))
+           
+            self.guiWin.surfaces.object_panel[1] += 120  # Spacing for fields
         self.guiWin.surfaces.object_panel = [10, 60, 380, 50]
-        
