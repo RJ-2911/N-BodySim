@@ -24,5 +24,5 @@ class Main:
         sim = sw.SimWindow(self.body_to_sim_queue, self.sim_to_body_queue)
         sim.main_loop()
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
     Main()
