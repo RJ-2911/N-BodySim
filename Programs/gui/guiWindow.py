@@ -7,11 +7,10 @@ import gui.models as mod
 import gui.body as bd
 
 class GuiWindow:
-    def __init__(self, body_to_sim_queue, sim_to_body_queue, mainObj):
+    def __init__(self, body_to_sim_queue, sim_to_body_queue):
         # Store queues for communication
         self.body_to_sim_queue = body_to_sim_queue
         self.sim_to_body_queue = sim_to_body_queue
-        self.mainObj = mainObj
 
 
         

@@ -19,11 +19,11 @@ class Main:
         sim_process.join()
 
     def run_gui(self):
-        gui = gw.GuiWindow(self, self.body_to_sim_queue, self.sim_to_body_queue)
+        gui = gw.GuiWindow(self.body_to_sim_queue, self.sim_to_body_queue)
         gui.main_loop()
 
     def run_sim(self):
-        sim = sw.SimWindow(self, self.body_to_sim_queue, self.sim_to_body_queue)
+        sim = sw.SimWindow(self.body_to_sim_queue, self.sim_to_body_queue)
         sim.main_loop()
 
 if __name__ == "__main__": 
