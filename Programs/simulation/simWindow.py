@@ -21,8 +21,8 @@ class SimWindow:
         display = (800, 600)    
         self.setWindow(display)
         self.clock = pg.time.Clock()
-        self.angle = 0.0
         self.running = True   
+        self.angle = 0
         self.sim_speed = 10 # Keep below 100, if 100+ then calculation precision suffers and simulation breaks
        
         # Initializing Classes for all files to access

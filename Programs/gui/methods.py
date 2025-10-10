@@ -8,10 +8,7 @@ class Method:
         self.result_list = []
         
     def string_show(self, *args):
-        """
-        Creates a formatted text string for display in the info panel.
-        Uses 3 decimal places for floating-point numbers.
-        """
+        
         font = pg.font.SysFont('Arial', 15)
         if len(args) == 1:
             text = f"{args[0]}"
