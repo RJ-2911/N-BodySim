@@ -18,7 +18,7 @@ class SimWindow:
         self.sim_to_body_queue = sim_to_body_queue
         
         # Initializing attributes for simulation window
-        display = (800, 600)    
+        display = (1200, 900)    
         self.setWindow(display)
         self.clock = pg.time.Clock()
         self.running = True   
